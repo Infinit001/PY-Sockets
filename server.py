@@ -65,6 +65,8 @@ def handle_client(conn, addr):
                     exists = os.path.exists(path)
                     if exists:
                         conn.sendall(FILE_EXISTS_MESSAGE.encode(FORMAT))
+                    else:
+                        conn.sendall(NOT_FOUND_ERROR.encode(FORMAT))
                 else:
                     conn.sendall(COMMAND_NOT_FOUND_ERROR.encode(FORMAT))
 
