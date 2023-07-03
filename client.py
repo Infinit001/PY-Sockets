@@ -42,7 +42,7 @@ def handle_response(response):
             disconnect()
         else:
             print("[CLIENT] Received message: ")
-            print(f"{final_string}")
+            print(f"{response}")
             disconnect()
             
 #------ HANDLE CONNECTING ------#
