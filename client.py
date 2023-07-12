@@ -92,19 +92,22 @@ def disconnect():
 #------ FUNCTION ------#
 def send(msg):
     message = msg.encode(FORMAT)
-    msg_length = len(message)
-    send_length = str(msg_length).encode(FORMAT)
-    send_length += b' ' * (HEADER - len(send_length))
-    client.send(send_length)
-    client.send(message)
+    if message:
+        msg_length = len(message)
+        send_length = str(msg_length).encode(FORMAT)
+        send_length += b' ' * (HEADER - len(send_length))
+        client.send(send_length)
+        client.send(message)
 
-    try:
-        response = client.recv(HEADER).decode(FORMAT)
-    except ConnectionResetError:
-        print("[DEBUG] Connection lost...")
+        try:
+            response = client.recv(HEADER).decode(FORMAT)
+        except ConnectionResetError:
+            print("[DEBUG] Connection lost...")
 
-    print(f"[DEBUG] I have received the following: {response}")
-    handle_response(response)
+        print(f"[DEBUG] I have received the following: {response}")
+        handle_response(response)
+    else:
+        print("[DEBUG] Please input a command.")
 
 #------ CALL CONNECT FUNCTION ------#
 connect()
