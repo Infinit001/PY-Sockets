@@ -8,6 +8,10 @@ server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 #------ INITIATE SERVER ------#
 server.bind(ADDR)
 
+#------ UPLOAD FUNCTION ------#
+def upload(filename: str, content: str):
+    pass
+
 #------ HANDLE THE CLIENT ------#
 #------ FUNCTION ------#
 def handle_client(conn, addr):
@@ -77,6 +81,10 @@ def handle_client(conn, addr):
                     #------ IF NOT EXIST ------#
                     else:
                         conn.sendall(NOT_FOUND_ERROR.encode(FORMAT))
+
+                elif msg.split(" ")[0] == UPLOAD_COMMAND:
+                    print("I got upload command")
+
                 else:
                     #------ COMMAND NOT FOUND ------#
                     conn.sendall(COMMAND_NOT_FOUND_ERROR.encode(FORMAT))
@@ -98,6 +106,8 @@ def handle_client(conn, addr):
 #------ FUNCTION ------#
 def start():
     server.listen()
+    os.system("cls")
+    print("/-----PY SOCKETS SERVER (FILE TRANSMITING)-----/")
     print(f"[SERVER] Listening on: {PORT} - {SERVER}")
     while True:
         #### ACCEPT ANY CONNECTIONS ####

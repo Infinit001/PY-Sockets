@@ -15,6 +15,7 @@ SHUTDOWN_MESSAGE = "!SHUTDOWN"
 RESTART_MESSAGE = "!RESTART"
 GET_COMMAND = "!get"
 EXIST_COMMAND = "!check"
+UPLOAD_COMMAND = "!upload"
 
 #------ ERRORS ------#
 NOT_FOUND_ERROR = "File error"

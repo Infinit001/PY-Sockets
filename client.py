@@ -3,6 +3,31 @@ import socket, time
 
 client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
+def received_package(response):
+    print("[CLIENT] PACKAGE RECEIVED")
+    if exist_cmd:
+        print(f"[DEBUG] Received: {response}")
+    else:
+        save_ans = input("[CLIENT] Would you like to save the received bytes into a file? (y/n): ").lower()
+        if save_ans == "y":
+            filename = input("[FILE SYSTEM] Please input filename to save as (with file extension): ")
+
+            #------ WRITE TO FILES ------#
+            with open(f"{filename}", 'w') as f:
+
+                string = response.split('bytearray(')[1]
+                string_2 = string.split("b'")[1]
+                final_string = string_2.split("'")[0]
+
+                f.write(final_string)
+
+            #------ ATTEMPT DISCONNECTION TO SERVER ------#
+            disconnect()
+        else:
+            print("[CLIENT] Received message: ")
+            print(f"{response}")
+            disconnect()
+
 #------ HANDLE RESPONSES ------#
 #------ FUNCTION ------#
 def handle_response(response):
@@ -24,26 +49,7 @@ def handle_response(response):
 
     #------ FILE WAS FOUND (CONFIRMATION) ------#
     else:
-        print("[CLIENT] PACKAGE RECEIVED")
-        save_ans = input("[CLIENT] Would you like to save the received bytes into a file? (y/n): ").lower()
-        if save_ans == "y":
-            filename = input("[FILE SYSTEM] Please input filename to save as (with file extension): ")
-
-            #------ WRITE TO FILES ------#
-            with open(f"{filename}", 'w') as f:
-
-                string = response.split('bytearray(')[1]
-                string_2 = string.split("b'")[1]
-                final_string = string_2.split("'")[0]
-
-                f.write(final_string)
-
-            #------ ATTEMPT DISCONNECTION TO SERVER ------#
-            disconnect()
-        else:
-            print("[CLIENT] Received message: ")
-            print(f"{response}")
-            disconnect()
+        received_package(response)
             
 #------ HANDLE CONNECTING ------#
 #------ FUNCTION ------#
@@ -91,6 +97,7 @@ def disconnect():
 #------ SEND TO SERVER ------#
 #------ FUNCTION ------#
 def send(msg):
+    global exist_cmd
     message = msg.encode(FORMAT)
     if message:
         msg_length = len(message)
@@ -105,6 +112,10 @@ def send(msg):
             print("[DEBUG] Connection lost...")
 
         print(f"[DEBUG] I have received the following: {response}")
+        if msg.split(" ")[0] == EXIST_COMMAND:
+            exist_cmd = True
+            handle_response(response)
+        
         handle_response(response)
     else:
         print("[DEBUG] Please input a command.")
