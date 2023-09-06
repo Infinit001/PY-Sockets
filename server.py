@@ -15,6 +15,7 @@ def upload(filename: str, content: str):
 #------ HANDLE THE CLIENT ------#
 #------ FUNCTION ------#
 def handle_client(conn, addr):
+    print(f"****PROCESSING REQUEST FROM {addr} ****")
     print(f"[CONNECTION] {addr} Connected.")
 
     #------ WHEN CLIENT CONNECTED ------#

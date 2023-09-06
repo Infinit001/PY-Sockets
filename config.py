@@ -28,3 +28,5 @@ FILE_EXISTS_MESSAGE = "File exists"
 #------ NON-GLOBAL VARIABLES ------#
 start_server = False
 connected = False
+exist_cmd = False
+upload_cmd = False

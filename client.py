@@ -7,6 +7,8 @@ def received_package(response):
     print("[CLIENT] PACKAGE RECEIVED")
     if exist_cmd:
         print(f"[DEBUG] Received: {response}")
+    elif upload_cmd:
+        print("Upload command executed and received response.")
     else:
         save_ans = input("[CLIENT] Would you like to save the received bytes into a file? (y/n): ").lower()
         if save_ans == "y":
@@ -40,12 +42,10 @@ def handle_response(response):
     #------ COMMAND NOT FOUND ------#
     elif response == COMMAND_NOT_FOUND_ERROR:
         print("[DEBUG] Command not found...")
-        exit()
 
     #------ FILE FOUND ------#
     elif response == FILE_FOUND_MESSAGE:
         print("[DEBUG] File does exist...")
-        exit()
 
     #------ FILE WAS FOUND (CONFIRMATION) ------#
     else:
@@ -97,7 +97,7 @@ def disconnect():
 #------ SEND TO SERVER ------#
 #------ FUNCTION ------#
 def send(msg):
-    global exist_cmd
+    global exist_cmd, upload_cmd
     message = msg.encode(FORMAT)
     if message:
         msg_length = len(message)
@@ -114,6 +114,10 @@ def send(msg):
         print(f"[DEBUG] I have received the following: {response}")
         if msg.split(" ")[0] == EXIST_COMMAND:
             exist_cmd = True
+            handle_response(response)
+            
+        elif msg.split(" ")[0] == UPLOAD_COMMAND:
+            upload_cmd = True
             handle_response(response)
         
         handle_response(response)

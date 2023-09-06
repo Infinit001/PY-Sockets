@@ -1,1 +1,1 @@
-hello eric
+hello, this is message from server
