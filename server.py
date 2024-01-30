@@ -131,7 +131,7 @@ def handle_client(conn, addr):
 # ------ FUNCTION ------#
 def start():
     server.listen()
-    os.system("cls")
+    os.system("clear")
     # print_welcome()
     print(f"[SERVER] Listening on: {PORT} - {SERVER}")
     while True:
