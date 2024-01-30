@@ -64,7 +64,12 @@ def connect():
     try:
         # ------ ATTEMPT CONNECTIONS ------#
         print("[DEBUG] Attempting connection...")
-        client.connect(ADDR)
+        # port = input("Please input port: ")
+        # ip = input("IP ADDRESS: ")
+
+        print()
+        client.connect((socket.gethostbyname("raspberrypi"), 5050))
+
         time.sleep(2)
         connected = True
         if connected:
