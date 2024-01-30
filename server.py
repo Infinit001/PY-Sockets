@@ -1,12 +1,13 @@
 import os, socket, sys, threading, time
 from config import *
-from art import text2art
+
+# from art import text2art
 
 
-def print_welcome():
-    welcome_text = text2art("RUNNING", "block")
-    print(welcome_text)
-    print(" /-----FILE TRANSMITTING SERVER-----/")
+# def print_welcome():
+#     welcome_text = text2art("RUNNING", "block")
+#     print(welcome_text)
+#     print(" /-----FILE TRANSMITTING SERVER-----/")
 
 
 # ------ DEFINE SERVER ------#
@@ -131,7 +132,7 @@ def handle_client(conn, addr):
 def start():
     server.listen()
     os.system("cls")
-    print_welcome()
+    # print_welcome()
     print(f"[SERVER] Listening on: {PORT} - {SERVER}")
     while True:
         #### ACCEPT ANY CONNECTIONS ####
