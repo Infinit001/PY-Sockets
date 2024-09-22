@@ -1,13 +1,13 @@
 import os, socket, sys, threading, time
 from config import *
 
-# from art import text2art
+from art import text2art
 
 
-# def print_welcome():
-#     welcome_text = text2art("RUNNING", "block")
-#     print(welcome_text)
-#     print(" /-----FILE TRANSMITTING SERVER-----/")
+def print_welcome():
+    welcome_text = text2art("RUNNING", "block")
+    print(welcome_text)
+    print(" /-----FILE TRANSMITTING SERVER-----/")
 
 
 # ------ DEFINE SERVER ------#
@@ -62,7 +62,7 @@ def handle_client(conn, addr):
                     print(f"[{addr}] {msg}")
                     file = msg.split(" ")[1]
                     print(file)
-                    path = f"/home/gabriel/PY-Sockets/{file}"
+                    path = f"{os.getcwd()}/{file}"
                     exists = os.path.exists(path)
 
                     ## IF FILE EXISTS ##
@@ -87,32 +87,23 @@ def handle_client(conn, addr):
                 #### EXIST COMMAND HANDLER ####
                 elif msg.split(" ")[0] == EXIST_COMMAND:
                     file = msg.split(" ")[1]
-                    path = f"/home/gabriel/PY-Sockets/{file}"
+                    path = f"{os.getcwd()}/{file}"
                     exists = os.path.exists(path)
 
                     # ------ IF IT EXISTS ------#
                     if exists:
                         conn.sendall(FILE_EXISTS_MESSAGE.encode(FORMAT))
-                        print(f"[CONNECTION] {addr} disconnected.")
-                        connected = False
-                        conn.close()
 
                     # ------ IF NOT EXIST ------#
                     else:
                         conn.sendall(NOT_FOUND_ERROR.encode(FORMAT))
-                        print(f"[CONNECTION] {addr} disconnected.")
-                        connected = False
-                        conn.close()
 
                 elif msg.split(" ")[0] == UPLOAD_COMMAND:
-                    print("I got upload command")
+                    conn.sendall("I got it".encode(FORMAT))
 
                 else:
                     # ------ COMMAND NOT FOUND ------#
                     conn.sendall(COMMAND_NOT_FOUND_ERROR.encode(FORMAT))
-                    #### CLOSE CONNECTION ####
-                    conn.close()
-                    break
 
         # ------ EXCEPT ANY ERRORS ------#
         except:
@@ -132,7 +123,8 @@ def handle_client(conn, addr):
 def start():
     server.listen()
     os.system("clear")
-    # print_welcome()
+    print_welcome()
+    connected = []
     print(f"[SERVER] Listening on: {PORT} - {SERVER}")
     while True:
         #### ACCEPT ANY CONNECTIONS ####
@@ -140,22 +132,26 @@ def start():
 
         #### PASS THROUGH THREADS ####
         # ------ ALLOW MULTIPLE PEOPLE TO REQUEST STUFF ------#
-        thread = threading.Thread(target=handle_client, args=(conn, addr))
-        thread.start()
-
-        print(f"[ACTIVE CONNECTIONS] {threading.active_count() -1}")
+        connected.append(str(addr))
+        if addr not in connected:
+            thread = threading.Thread(target=handle_client, args=(conn, addr))
+            thread.start()
+            print(f"[ACTIVE CONNECTIONS] {threading.active_count() -1}")
+        else:
+            pass
 
 
 #### INITIALISE SERVER CONFIGURATIONS ####
 try:
     print("[DEBUG] Initialising Server Configs...")
-    time.sleep(4)
     start_server = True
     print("[CONFIG] Configs files loaded...")
-    time.sleep(1)
     print("[SERVER] Booting up...")
-    time.sleep(3)
-    start()
+    try:
+        start()
+    except Exception as e:
+        print(e)
+        sys.exit()
     print(f"[SERVER] Successfully booted up as {SERVER}")
 
 except Exception as e:

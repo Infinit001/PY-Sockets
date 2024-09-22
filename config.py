@@ -1,10 +1,9 @@
 import socket
 
-
 # ------ GLOBAL VARAIBLES ------#
 HEADER = 64
 PORT = 5050
-SERVER = "192.168.100.83"
+SERVER = socket.gethostbyname(socket.gethostname())
 ADDR = (SERVER, PORT)
 BUFFER_SIZE = 4096
 FORMAT = "utf-8"
